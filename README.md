@@ -30,7 +30,6 @@ A aplicação se propõe a exibir e armazenar avaliações de filmes. O usuário
 ## Front end
 - HTML / CSS / JS / TypeScript
 - ReactJS
-- React Native
 ## Implantação em produção
 - Back end: Heroku
 - Front end web: Netlify
