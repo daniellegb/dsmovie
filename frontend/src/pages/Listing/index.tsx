@@ -1,4 +1,5 @@
 import axios from "axios";
+import ImageLoader from "components/Loaders/ImageLoader";
 import MovieCard from "components/MovieCard";
 import Pagination from "components/Pagination";
 import { useEffect, useState } from "react";
@@ -7,6 +8,7 @@ import { BASE_URL } from "util/requests";
 
 function Listing() {
   const [pageNumber, setPageNumber] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [page, setPage] = useState<MoviePage>({
     content: [],
@@ -21,11 +23,14 @@ function Listing() {
   });
 
   useEffect(() => {
+    setIsLoading(true);
     axios
       .get(`${BASE_URL}/movies?size=12&page=${pageNumber}&sort=id`)
       .then((response) => {
         const data = response.data as MoviePage;
         setPage(data);
+      }).finally(() => {
+        setIsLoading(false);
       });
   }, [pageNumber]);
 
@@ -38,11 +43,17 @@ function Listing() {
       <Pagination page={page} onChange={handlePageChange} />
       <div className="container">
         <div className="row">
-          {page.content.map((movie) => (
-            <div key={movie.id} className="col-sm-6 col-lg-4 col-xl-3 mb-3">
-              <MovieCard movie={movie} />
-            </div>
-          ))}
+          {isLoading ?
+            <ImageLoader />
+            :
+            <>
+              {page.content.map((movie) => (
+                <div key={movie.id} className="col-sm-6 col-lg-4 col-xl-3 mb-3">
+                  <MovieCard movie={movie} />
+                </div>
+              ))}
+            </>
+         }
         </div>
       </div>
     </>
